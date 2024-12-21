@@ -1,0 +1,27 @@
+# Ignore virtual environments
+venv/
+alxvenv
+
+# Ignore python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore environment variable files
+.env
+
+# Ignore logs
+*.log
+
+# Ignore database files
+*.sqlite3
+
+# Ignore compiled files
+*.so
+*.dll
+
+# Ignore IDE-specific files (e.g Vscode, pycharm)
+
+.vscode/
+.idea/
+*.swp
