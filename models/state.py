@@ -8,6 +8,6 @@ class State(BaseModel):
     name = ''
     state_id = ''
 
-    def __init__(self, args, **kwargs):
+    def __init__(self, *args, **kwargs):
         """initialization of State """
         super().__init__(*args, **kwargs)

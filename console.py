@@ -42,14 +42,44 @@ class HBNBCommand(Cmd):
         """Creates a new instance of BaseModel, saves it to JSON and prints the `id`"""
         parsed_args = shlex.split(arg)
         try:
-            if not arg:
+            if not parsed_args:
                 print('** class name missing **')
-            elif arg not in classes:
+                return
+            elif parsed_args[0] not in classes:
                 print("** class doesn't exist **")
-            else:
-                obj = classes[arg]()
-                obj.save()
-                print(obj.id)
+                return
+
+            params = parsed_args[1:]
+            attributes = {}
+
+            for param in params:
+                if "=" not in param:
+                    continue
+
+                key, value = param.split("=", 1)
+                if value.startswith('"') and value.endswith('"'):
+                    value = value[1:-1]
+                    value = value.replace("_", " ")
+                    value.replace('\\"', '"')
+
+                elif "." in value:
+                    try:
+                        value = float(value)
+                    except ValueError:
+                        continue
+               
+                else:
+                    try:
+                        value = int(value)
+                    except ValueError:
+                        continue
+
+                attributes[key] = value
+
+            new_obj = classes[parsed_args[0]](**attributes)
+            new_obj.save()
+            print(new_obj.id)
+
         except Exception as e:
             print(e)
 
