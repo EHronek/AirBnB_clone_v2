@@ -19,12 +19,15 @@ class BaseModel:
                 setattr(self, key, value)
             if 'id' not in kwargs:
                 self.id = str(uuid.uuid4())
-                self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+            #if "created_at" not in kwargs:
+            #    self.created_at = datetime.now()
+            #if 'updated_at' not in kwargs:
+            #    self.updated_at = datetime.now()
             storage.new(self)
         else:
             self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
+            self.created_at = kwargs.get('created_at', datetime.now())
+            self.updated_at = kwargs.get('updated_at', datetime.now())
             storage.new(self)
 
     def save(self):

@@ -11,8 +11,13 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self):
-        """returns the dictionary __objects"""
+    def all(self, cls=None):
+        """Intially returned the dictionary __objects
+           returns the list of all objects of one type of class
+        """
+        if cls:
+            return {k: v  for k, v in self.__objects.items() if isinstance(v, cls)}
+
         return self.__objects
 
     def new(self, obj):
@@ -31,7 +36,6 @@ class FileStorage:
         doesn't exist, no exemption should be raised"""
         from models.base_model import BaseModel
         from models.user import User
-        from models.user import User
         from models.place import Place
         from models.state import State
         from models.amenity import Amenity
@@ -46,3 +50,16 @@ class FileStorage:
                     self.new(eval(class_name)(**data))
         except FileNotFoundError:
             pass
+        except json.JSONDecodeError:
+            pass
+
+    def delete(self, obj=None):
+        """
+        Deletes obj from __objects if its inside else it Returns
+        """
+        if obj is None:
+            return
+        if obj is not None:
+            key = f"{obj.__class__.__name__}.{obj.id}"
+        if key in self.__objects:
+             del self.__objects[key]
