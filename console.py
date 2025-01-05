@@ -39,53 +39,103 @@ class HBNBCommand(Cmd):
         """Do nothing on empty input line"""
         pass
 
+    
     def do_create(self, arg):
         """
-        Creates a new instance of BaseModel, saves it to
-        JSON and prints the `id`
+        Creates a new instance of a given class, sets attributes from
+        provided key=value pairs, saves it, and prints the `id`.
         """
+        import shlex
+
         parsed_args = shlex.split(arg)
-        try:
-            if not parsed_args:
-                print('** class name missing **')
-                return
-            elif parsed_args[0] not in classes:
-                print("** class doesn't exist **")
-                return
+        print("Actual args:", arg)
+        print("Parsed args after split", parsed_args)
 
-            params = parsed_args[1:]
-            attributes = {}
+        if not parsed_args:
+            print('** class name missing **')
+            return
 
-            for param in params:
-                if "=" not in param:
+        class_name = parsed_args[0]
+        print(class_name)
+        if class_name not in classes:
+            print("** class doesn't exist **")
+            return
+
+        params = parsed_args[1:]
+        print("Params: ", params)
+        attributes = {}
+
+        for param in params:
+            print(f"Processing param: {param}")
+            if "=" not in param:
+                continue  # Skip invalid key-value pairs
+
+            key, value = param.split("=", 1)
+            print(f"Key: {key}, Value: {value}")
+            print("Debug 1")
+            #attributes[key] = value
+            # Handle string values
+            
+            if value.startswith('"') and value.endswith('"'):
+                #print("Debug 1.1")
+                value = value[1:-1]  # Remove surrounding quotes
+                #print("Debug 1.2")
+                value = value.replace("\\_", "_")  # Handle escaped underscores
+                #print("Debug 1.3")
+                value = value.replace('\\"', '"')  # Handle escaped double quotes
+                #print("Debug 1.4")
+                #print("Handle string values Successfull")
+                #print("Debug 2")
+
+            # Handle float values
+            elif "." in value:
+                try:
+                    value = float(value)
+                except ValueError:
+                    continue  # Skip invalid float values
+                #print("handle float values successfull")
+        
+                #print("Debug 3")
+
+                # Handle integer values
+                '''else:
+                try:
+                    value = int(value)
+                except ValueError:
+                    continue  # Skip invalid integer values
+                print("Handle Integer values successfull")
+
+                print("Debug 4")'''
+            elif value.isdigit() or (value[0] == '-' and value[1:].isdigit()):
+                try:
+                    value = int(value)
+                except ValueError:
                     continue
 
-                key, value = param.split("=", 1)
-                if value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1]
-                    value = value.replace("_", " ")
-                    value.replace('\\"', '"')
-
-                elif "." in value:
-                    try:
-                        value = float(value)
-                    except ValueError:
-                        continue
-
-                else:
-                    try:
-                        value = int(value)
-                    except ValueError:
-                        continue
-
+            else:
                 attributes[key] = value
+        print(f"Final attributes: {attributes}")
 
-            new_obj = classes[parsed_args[0]](**attributes)
-            new_obj.save()
+        # Create and save the new object
+        try:
+            new_obj = classes[class_name]()  # Instantiate the object
+            for key, value in attributes.items():  # Set attributes manually
+                setattr(new_obj, key, value)
+
+            print("My new object:", new_obj.to_dict())
+            
+            try:
+                new_obj.save()
+                print("Save successful")
+            except Exception as save_error:
+                print(f"Save unsuccessful: {save_error}")
+            
             print(new_obj.id)
-
         except Exception as e:
-            print(e)
+            print(f"Error: {e}")
+
+
+
 
     def do_show(self, arg):
         """
