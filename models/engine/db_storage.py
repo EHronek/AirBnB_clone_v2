@@ -12,12 +12,16 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 #import models
 
 
-class_models = {"User": User, "City": City, "Place": Place,
-           "State": State, "Review": Review, "Amenity": Amenity}
+#class_models = {"User": User, "City": City, "Place": Place,
+#           "State": State, "Review": Review, "Amenity": Amenity}
 
 
 class DBStorage:
     """Definition of the DBStorage class"""
+    class_models = {
+        "City": City,
+        "State": State,
+    }
     __engine = None
     __session = None
 
@@ -38,20 +42,50 @@ class DBStorage:
 
     def all(self, cls=None):
         """Query on the  current database session"""
-        '''data = {}
+        '''
+        data = {}
         for clas in class_models:
             if cls is None or cls is class_models[clas] or cls is clas:
                 class_objs = self.__session.query(class_models[clas]).all()
                 for obj in class_objs:
                     key = obj.__class__.__name__+ '.'+ obj.id
                     data[key] = obj
-        return(data)'''
+        return(data)
+        '''
+        '''
         if cls:
             class_objs = self.__session.query(cls).all()
         else:
             class_objs = self.__session.query(State).all()
         return {obj.id: obj for obj in class_objs}
+        '''
+        data = {}
+        if cls:
+            if isinstance(cls, str):
+                cls = self.class_models.get(cls)
+                if cls is None:
+                    raise ValueError(f"Class {cls} is not a valid model")
 
+            if cls not in self.class_models.values():
+                raise ValueError(f"Class {cls} is not a valid Model")
+
+            if cls not in self.class_models.values():
+                raise ValueError(f"Class '{cls}' is not recognized as a valid sqlalchemy model")
+            
+            class_objs = self.__session.query(cls).all()
+            for obj in class_objs:
+                key = f"{obj.__class__.__name__}.{obj.id}"
+                data[key] = obj
+
+        else:
+            for clas in self.class_models.values():
+                class_objs = self.__session.query(clas).all()
+                for obj in class_objs:
+                    key = f"{obj.__class__.__name__}.{obj.id}"
+                    data[key] = obj
+
+        return data
+            
 
     def new(self, obj):
         """add the object to the current database session"""

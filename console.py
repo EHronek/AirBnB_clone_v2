@@ -11,6 +11,7 @@ from models.state import State
 from models.amenity import Amenity
 from models.review import Review
 from models.city import City
+import models
 
 classes = {
     'BaseModel': BaseModel,
@@ -72,7 +73,7 @@ class HBNBCommand(Cmd):
 
             key, value = param.split("=", 1)
             print(f"Key: {key}, Value: {value}")
-            print("Debug 1")
+            #print("Debug 1")
             #attributes[key] = value
             # Handle string values
             
@@ -190,7 +191,7 @@ class HBNBCommand(Cmd):
         if class_name not in classes:
             print("** class doesn't exist **")
             return
-        instances = [str(obj) for key, obj in storage.all().items() if key.startswith(class_name)]
+        instances = [str(obj) for key, obj in models.storage.all().items() if key.startswith(class_name)]
         print(instances)
 
     def do_update(self, arg):
