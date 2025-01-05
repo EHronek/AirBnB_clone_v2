@@ -21,6 +21,7 @@ class DBStorage:
     class_models = {
         "City": City,
         "State": State,
+        "User": User,
     }
     __engine = None
     __session = None

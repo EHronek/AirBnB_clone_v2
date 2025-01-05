@@ -11,7 +11,6 @@ from models.state import State
 from models.amenity import Amenity
 from models.review import Review
 from models.city import City
-import models
 
 classes = {
     'BaseModel': BaseModel,
@@ -73,48 +72,30 @@ class HBNBCommand(Cmd):
 
             key, value = param.split("=", 1)
             print(f"Key: {key}, Value: {value}")
-            #print("Debug 1")
-            #attributes[key] = value
+
             # Handle string values
-            
             if value.startswith('"') and value.endswith('"'):
-                #print("Debug 1.1")
                 value = value[1:-1]  # Remove surrounding quotes
-                #print("Debug 1.2")
                 value = value.replace("\\_", "_")  # Handle escaped underscores
-                #print("Debug 1.3")
                 value = value.replace('\\"', '"')  # Handle escaped double quotes
-                #print("Debug 1.4")
-                #print("Handle string values Successfull")
-                #print("Debug 2")
 
             # Handle float values
             elif "." in value:
                 try:
                     value = float(value)
                 except ValueError:
-                    continue  # Skip invalid float values
-                #print("handle float values successfull")
-        
-                #print("Debug 3")
+                    value = str(value)  # Skip invalid float values
 
-                # Handle integer values
-                '''else:
-                try:
-                    value = int(value)
-                except ValueError:
-                    continue  # Skip invalid integer values
-                print("Handle Integer values successfull")
-
-                print("Debug 4")'''
+            # Handle integer values
             elif value.isdigit() or (value[0] == '-' and value[1:].isdigit()):
                 try:
                     value = int(value)
                 except ValueError:
-                    continue
+                    continue  # Skip invalid integer values
 
-            else:
-                attributes[key] = value
+            # Add the processed key-value pair to attributes
+            attributes[key] = value
+
         print(f"Final attributes: {attributes}")
 
         # Create and save the new object
@@ -124,16 +105,17 @@ class HBNBCommand(Cmd):
                 setattr(new_obj, key, value)
 
             print("My new object:", new_obj.to_dict())
-            
+
             try:
                 new_obj.save()
                 print("Save successful")
             except Exception as save_error:
                 print(f"Save unsuccessful: {save_error}")
-            
+
             print(new_obj.id)
         except Exception as e:
             print(f"Error: {e}")
+
 
 
 
@@ -191,7 +173,7 @@ class HBNBCommand(Cmd):
         if class_name not in classes:
             print("** class doesn't exist **")
             return
-        instances = [str(obj) for key, obj in models.storage.all().items() if key.startswith(class_name)]
+        instances = [str(obj) for key, obj in storage.all().items() if key.startswith(class_name)]
         print(instances)
 
     def do_update(self, arg):
