@@ -47,8 +47,8 @@ class HBNBCommand(Cmd):
         import shlex
 
         parsed_args = shlex.split(arg)
-        print("Actual args:", arg)
-        print("Parsed args after split", parsed_args)
+        # print("Actual args:", arg)
+        # print("Parsed args after split", parsed_args)
 
         if not parsed_args:
             print('** class name missing **')
