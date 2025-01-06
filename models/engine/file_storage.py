@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """ Defines a class storage that serializes instances to a json file
     and desirializes JSON file to instances"""
 import json
@@ -16,7 +16,7 @@ class FileStorage:
            returns the list of all objects of one type of class
         """
         if cls:
-            return {k: v  for k, v in self.__objects.items() if isinstance(v, cls)}
+            return {k: v for k, v in self.__objects.items() if isinstance(v, cls)}
 
         return self.__objects
 
@@ -62,4 +62,4 @@ class FileStorage:
         if obj is not None:
             key = f"{obj.__class__.__name__}.{obj.id}"
         if key in self.__objects:
-             del self.__objects[key]
+            del self.__objects[key]

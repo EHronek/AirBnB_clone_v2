@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """Defines all common attributes/methods for other classes"""
 import uuid
 from datetime import datetime
@@ -14,7 +14,8 @@ class BaseModel:
     """ base class for all the other classes on the project"""
 
     if models.type_storage == "db":
-        id = Column(String(60), nullable=False, primary_key=True, default=lambda: str(uuid.uuid4()))
+        id = Column(String(60), nullable=False, primary_key=True,
+                    default=lambda: str(uuid.uuid4()))
         created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
         updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
@@ -40,7 +41,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = kwargs.get('created_at', datetime.now())
             self.updated_at = kwargs.get('updated_at', datetime.now())
-            #storage.new(self)
+            # models.storage.new(self)
         '''
         if kwargs:
             for key, value in kwargs.items():

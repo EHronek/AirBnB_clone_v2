@@ -39,7 +39,6 @@ class HBNBCommand(Cmd):
         """Do nothing on empty input line"""
         pass
 
-    
     def do_create(self, arg):
         """
         Creates a new instance of a given class, sets attributes from
@@ -56,23 +55,23 @@ class HBNBCommand(Cmd):
             return
 
         class_name = parsed_args[0]
-        print(class_name)
+        # print(class_name)
         if class_name not in classes:
             print("** class doesn't exist **")
             return
 
         params = parsed_args[1:]
-        print("Params: ", params)
+        # print("Params: ", params)
         attributes = {}
 
         for param in params:
-            print(f"Processing param: {param}")
+            # print(f"Processing param: {param}")
             if "=" not in param:
                 continue  # Skip invalid key-value pairs
 
             key, value = param.split("=", 1)
-            print(f"Key: {key}, Value: {value}")
-
+            # print(f"Key: {key}, Value: {value}")
+            '''
             # Handle string values
             if value.startswith('"') and value.endswith('"'):
                 value = value[1:-1]  # Remove surrounding quotes
@@ -94,9 +93,10 @@ class HBNBCommand(Cmd):
                     continue  # Skip invalid integer values
 
             # Add the processed key-value pair to attributes
+            '''
             attributes[key] = value
 
-        print(f"Final attributes: {attributes}")
+        # print(f"Final attributes: {attributes}")
 
         # Create and save the new object
         try:
@@ -104,21 +104,14 @@ class HBNBCommand(Cmd):
             for key, value in attributes.items():  # Set attributes manually
                 setattr(new_obj, key, value)
 
-            print("My new object:", new_obj.to_dict())
+            # print("My new object:", new_obj.to_dict())
 
-            try:
-                new_obj.save()
-                print("Save successful")
-            except Exception as save_error:
-                print(f"Save unsuccessful: {save_error}")
+            new_obj.save()
+            # print(f"Save unsuccessful: {save_error}")
 
             print(new_obj.id)
         except Exception as e:
             print(f"Error: {e}")
-
-
-
-
 
     def do_show(self, arg):
         """

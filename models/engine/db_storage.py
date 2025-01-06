@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """Contains new engine DBStorage"""
 from os import getenv
 from sqlalchemy import create_engine
@@ -9,11 +10,7 @@ from models.base_model import BaseModel, Base
 from models.user import User
 from models.review import Review
 from sqlalchemy.orm import scoped_session, sessionmaker
-#import models
-
-
-#class_models = {"User": User, "City": City, "Place": Place,
-#           "State": State, "Review": Review, "Amenity": Amenity}
+# import models
 
 
 class DBStorage:
@@ -37,7 +34,8 @@ class DBStorage:
                                       format(HBNB_MYSQL_USER,
                                              HBNB_MYSQL_PWD,
                                              HBNB_MYSQL_HOST,
-                                             HBNB_MYSQL_DB), pool_pre_ping=True)
+                                             HBNB_MYSQL_DB),
+                                      pool_pre_ping=True)
         if HBNB_ENV == "test":
             Base.metadata.drop_all(self.__engine)
 
@@ -68,11 +66,11 @@ class DBStorage:
                     raise ValueError(f"Class {cls} is not a valid model")
 
             if cls not in self.class_models.values():
-                raise ValueError(f"Class {cls} is not a valid Model")
+                raise ValueError(f"Class {cls} is not valid Model")
 
             if cls not in self.class_models.values():
-                raise ValueError(f"Class '{cls}' is not recognized as a valid sqlalchemy model")
-            
+                raise ValueError(f"'{cls}' is not recognized")
+
             class_objs = self.__session.query(cls).all()
             for obj in class_objs:
                 key = f"{obj.__class__.__name__}.{obj.id}"
@@ -86,7 +84,6 @@ class DBStorage:
                     data[key] = obj
 
         return data
-            
 
     def new(self, obj):
         """add the object to the current database session"""
@@ -111,7 +108,8 @@ class DBStorage:
     def reload(self):
         """creates all tables in the database"""
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
         print("Session intialized:", self.__session)

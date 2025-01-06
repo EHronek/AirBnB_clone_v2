@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """ Defines a class Place """
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Table, Integer, Float
@@ -17,6 +17,7 @@ if models.type_storage == "db":
                                             ondelete='CASCADE'),
                                  primary_key=True))
 
+
 class Place(BaseModel, Base):
     """ Defination of the class place """
 
@@ -31,8 +32,8 @@ class Place(BaseModel, Base):
         max_guest = Column(Integer, nullable=False, default=0)
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
-        longitude = Column(Float, nullable= True)
-        reviews = relationship("Review", backref="place")
+        longitude = Column(Float, nullable=True)
+        reviews = relationship("Review", backref="place", cascade="all, delete-orphan")
         amenities = relationship("Amenity", secondary="place_amenity",
                                  backref="place_amenities",
                                  viewonly=False)

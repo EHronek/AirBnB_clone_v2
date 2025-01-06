@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """ Defines the class review that inherits from the BaseModel """
 from models.base_model import BaseModel, Base
 import models
