@@ -112,7 +112,7 @@ class DBStorage:
                                        expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
-        print("Session intialized:", self.__session)
+        #print("Session intialized:", self.__session)
 
     def close(self):
         """explicitly dispose of the scoped session"""
