@@ -3,7 +3,7 @@
     and desirializes JSON file to instances"""
 import json
 import models
-from models.base_model import Base
+
 
 class FileStorage:
     """serializes instances to json file and desirializes json file
