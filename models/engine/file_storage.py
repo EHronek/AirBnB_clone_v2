@@ -12,15 +12,11 @@ class FileStorage:
     __objects = {}
 
     def delete(self, obj=None):
-        """
-        Deletes obj from __objects if its inside else it Returns
-        """
-        if obj is None:
-            return
+        """Deletes obj from __objects if its inside else it Returns"""
         if obj is not None:
             key = f"{obj.__class__.__name__}.{obj.id}"
-        if key in self.__objects:
-            del self.__objects[key]
+            if key in self.__objects:
+                del self.__objects[key]
 
     def all(self, cls=None):
         """Intially returned the dictionary __objects
