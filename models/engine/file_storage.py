@@ -11,6 +11,17 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
+    def delete(self, obj=None):
+        """
+        Deletes obj from __objects if its inside else it Returns
+        """
+        if obj is None:
+            return
+        if obj is not None:
+            key = f"{obj.__class__.__name__}.{obj.id}"
+        if key in self.__objects:
+            del self.__objects[key]
+
     def all(self, cls=None):
         """Intially returned the dictionary __objects
            returns the list of all objects of one type of class
@@ -29,17 +40,6 @@ class FileStorage:
         """ serializes __objects to json file (path: __file_path)"""
         with open(self.__file_path, 'w') as f:
             json.dump({k: v.to_dict() for k, v in self.__objects.items()}, f)
-
-    def delete(self, obj=None):
-        """
-        Deletes obj from __objects if its inside else it Returns
-        """
-        if obj is None:
-            return
-        if obj is not None:
-            key = f"{obj.__class__.__name__}.{obj.id}"
-        if key in self.__objects:
-            del self.__objects[key]
 
     def reload(self):
         """ Deserializes the json file to __objects (only if the JSON
