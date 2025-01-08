@@ -30,6 +30,17 @@ class FileStorage:
         with open(self.__file_path, 'w') as f:
             json.dump({k: v.to_dict() for k, v in self.__objects.items()}, f)
 
+    def delete(self, obj=None):
+        """
+        Deletes obj from __objects if its inside else it Returns
+        """
+        if obj is None:
+            return
+        if obj is not None:
+            key = f"{obj.__class__.__name__}.{obj.id}"
+        if key in self.__objects:
+            del self.__objects[key]
+
     def reload(self):
         """ Deserializes the json file to __objects (only if the JSON
         file(__file_path) exists: otherwise, do nothing. If the file
@@ -52,14 +63,3 @@ class FileStorage:
             pass
         except json.JSONDecodeError:
             pass
-
-    def delete(self, obj=None):
-        """
-        Deletes obj from __objects if its inside else it Returns
-        """
-        if obj is None:
-            return
-        if obj is not None:
-            key = f"{obj.__class__.__name__}.{obj.id}"
-        if key in self.__objects:
-            del self.__objects[key]
