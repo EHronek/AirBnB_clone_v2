@@ -30,6 +30,12 @@ sudo ln -s -f /data/web_static/releases/test/ /data/web_static/current
 
 sudo chown -R ubuntu:ubuntu /data/
 
-sudo sed -i '/listen 80;/a location /hbnb_static { alias /data/web_static/current/;}' /etc/nginx/sites-enabled/default
+#sudo sed -i '/listen 80;/a location /hbnb_static { alias /data/web_static/current/;}' /etc/nginx/sites-enabled/default
+if ! grep -q "location /hbnb_static/" "/etc/ngonx/sites-available/default"; then
+	sudo sed -i '/server_name _;/a \\
+	location /hbnb_static/ {
+	    alias /data/web_static/current/;
+	}' "/etc/nginx/sites-available/default"
+fi
 
 sudo service nginx restart
