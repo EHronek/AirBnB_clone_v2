@@ -7,12 +7,13 @@ from fabric.api import local
 from datetime import datetime
 import os
 
+
 def do_pack():
     """Distributes archive to my web server"""
     if not os.path.exists("versions"):
         os.makedirs("versions")
 
-    timestamp = datetime.now().strftime("%Y%m%d%H%M%S") 
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     archive_name = f"versions/web_static_{timestamp}.tgz"
     local("mkdir -p versions")
 
