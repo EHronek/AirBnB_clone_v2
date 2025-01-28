@@ -1,14 +1,27 @@
 #!/usr/bin/python3
-"""
-distributes an archive to your web server, using
-function do_deploy
-Return:- false if the file at the path archive_path doesn't exit
-"""
-
-from fabric.api import put, run, env
+"""Fabric script (based on the file 2-do_deploy_web_static.py) that creates and distributes an archive to your web servers, using the function deploy"""
+from fabric.api import *
 import os
+from datetime import datetime
+
 env.hosts = ['52.3.247.198', '54.86.157.210']
 env.key_filename = "~/.ssh/id_rsa"
+
+def do_pack():
+    """Distributes archive to my web server"""
+    if not os.path.exists("versions"):
+        os.makedirs("versions")
+
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    archive_name = f"versions/web_static_{timestamp}.tgz"
+    local("mkdir -p versions")
+
+    create_tar = local('tar -cvzf {} web_static'.format(archive_name))
+
+    if create_tar.succeeded:
+        return archive_name
+    else:
+        return None
 
 def do_deploy(archive_path):
     """distributes an archive to the web servers"""
@@ -29,3 +42,10 @@ def do_deploy(archive_path):
         return True
     except:
         return False
+
+def deploy():
+    """creates and distributes an archive to the web servers"""
+    archive_path = do_pack()
+    if archive_path is None:
+        return False
+    return do_deploy(archive_path)
