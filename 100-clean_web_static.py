@@ -5,7 +5,7 @@ Script deletes out of date archives
 import os
 from fabric.api import *
 
-env.hosts= ['52.3.247.198', '54.86.157.210']
+env.hosts = ['52.3.247.198', '54.86.157.210']
 
 
 def do_clean(number=0):
@@ -18,7 +18,7 @@ def do_clean(number=0):
         [local("rm ./{}".format(arch)) for arch in archive_files]
     with cd("/data/web_static/releases"):
         archive_files = run("ls -tr").split()
-        archive_files = [arch for arch in archive_files if "web_static_" in arch]
+        archive_files = [arch for arch in archive_files
+                         if "web_static_" in arch]
         [archive_files.pop() for i in range(number)]
         [run("rm -rf ./{}".format(arc)) for arc in archive_files]
-
