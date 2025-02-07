@@ -4,6 +4,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
+
 @app.route("/", strict_slashes=False)
 def hello_hbnb():
     """Handles request that hit the root url"""
@@ -20,6 +21,7 @@ def hbnb():
 def cisfun(text):
     """Handles request from /c/<text> and print value in text"""
     return f"C {text.replace('_', ' ')}"
+
 
 @app.route("/python", strict_slashes=False)
 @app.route("/python/<text>", strict_slashes=False)
