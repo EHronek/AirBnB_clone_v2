@@ -115,5 +115,8 @@ class DBStorage:
         #print("Session intialized:", self.__session)
 
     def close(self):
-        """explicitly dispose of the scoped session"""
+        """
+        explicitly dispose of the scoped session
+        call remove() on the private session attribute
+        """
         self.__session.remove()

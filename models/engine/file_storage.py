@@ -59,3 +59,7 @@ class FileStorage:
             pass
         except json.JSONDecodeError:
             pass
+
+    def close(self):
+        """call reload method for deserializing the JSON file objects"""
+        self.reload()
