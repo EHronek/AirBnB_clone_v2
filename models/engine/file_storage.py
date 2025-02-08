@@ -23,7 +23,8 @@ class FileStorage:
            returns the list of all objects of one type of class
         """
         if cls:
-            return {k: v for k, v in self.__objects.items() if isinstance(v, cls)}
+            return {k: v for k, v in self.__objects.items()
+                    if isinstance(v, cls)}
 
         return self.__objects
 
