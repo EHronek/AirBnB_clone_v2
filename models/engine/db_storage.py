@@ -19,6 +19,9 @@ class DBStorage:
         "City": City,
         "State": State,
         "User": User,
+        "Place": Place,
+        "Amenity": Amenity,
+        "Review": Review,
     }
     __engine = None
     __session = None
@@ -88,15 +91,15 @@ class DBStorage:
     def new(self, obj):
         """add the object to the current database session"""
         if obj:
-            # print(f"Adding object to session: {obj}")
+            print(f"Adding object to session: {obj}")
             self.__session.add(obj)
 
     def save(self):
         """commit all changes of the current database session"""
         try:
-            # print("Committing changes to the database...")
+            print("Committing changes to the database...")
             self.__session.commit()
-            # print("Changes committed successfully.")
+            print("Changes committed successfully.")
         except Exception as e:
             print(f"Error during commit: {e}")
 
